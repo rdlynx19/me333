@@ -1,39 +1,3 @@
-# chapter 28 in python
-
-# sudo apt-get install python3-pip
-# python3 -m pip install pyserial
-# sudo apt-get install python3-matplotlib
-from genref import genRef
-
-import matplotlib.pyplot as plt 
-from statistics import mean 
-def read_plot_matrix():
-    n_str = ser.read_until(b'\n');  # get the number of data points to receive
-    n_int = int(n_str) # turn it into an int
-    print('Data length = ' + str(n_int))
-    ref = []
-    data = []
-    data_received = 0
-    while data_received < n_int:
-        dat_str = ser.read_until(b'\n');  # get the data as a string, ints seperated by spaces
-        dat_int = list(map(float,dat_str.split())) # now the data is a list
-        ref.append(dat_int[0])
-        data.append(dat_int[1])
-        data_received = data_received + 1
-    meanzip = zip(ref,data)
-    meanlist = []
-    for i,j in meanzip:
-        meanlist.append(abs(i-j))
-    score = mean(meanlist)
-    t = range(len(ref)) # index array
-    plt.plot(t,ref,'r*-',t,data,'b*-')
-    plt.title('Score = ' + str(score))
-    plt.ylabel('value')
-    plt.xlabel('index')
-    plt.show()
-
-# from genref import genRef
-
 import serial
 ser = serial.Serial('/dev/ttyUSB0',230400)
 print('Opening port: ')
@@ -91,67 +55,26 @@ while not has_quit:
         Kp_flt = float(Kp_input)
         Ki_flt = float(Ki_input)
         print(f"Current gains set to Kp: {Kp_flt} and Ki: {Ki_flt}\n")
-        current_gain_str = f"{Kp_flt} {Ki_flt}\n"
-        ser.write(current_gain_str.encode())
+        ser.write((str(Kp_flt) + str(Ki_flt) + '\n').encode())
     elif (selection == 'h'):
         gains = ser.readline().decode().strip()
         kp_value = float(gains.split("Kp:")[1].split(",")[0].strip())
         ki_value = float(gains.split("Ki:")[1].strip())
         print(f"Kp: {kp_value} and Ki: {ki_value}\n")
     elif (selection == 'i'):
-        Kpos_input = input("Enter proportional gain value: ")
-        Kipos_input = input("Enter integral gain value: ")
-        Kdpos_input = input("Enter derivative gain value: ")
-        Kpos_flt = float(Kpos_input)
-        Kipos_flt = float(Kipos_input)
-        Kdpos_flt = float(Kdpos_input)
-        print(f"Position gains set to Kp: {Kpos_flt}, Ki: {Kipos_flt}, Kd: {Kdpos_flt}\n")
-        gains_str = f"{Kpos_flt} {Kipos_flt} {Kdpos_flt}\n"
-        ser.write(gains_str.encode())
+        pass
     elif (selection == 'j'):
-        gains = ser.readline().decode().strip()
-        kp_value = float(gains.split("Kp:")[1].split(",")[0].strip())
-        ki_value = float(gains.split("Ki:")[1].split(",")[0].strip())
-        kd_value = float(gains.split("Kd:")[1].strip())
-        print(f"Kp: {kp_value}, Ki: {ki_value} and Kd: {kd_value}\n")
+        pass
     elif (selection == 'k'):
         print(f"Testing current gains!\n")
-        read_plot_matrix();
-
     elif (selection == 'l'):
-        desiredInput= input("Entire the desired angle in degrees: ")
-        desiredAngle = float(desiredInput)
-        print(f"Desired angle set to: {desiredAngle}\n")
-        angle_str = f"{desiredAngle}\n"
-        ser.write(angle_str.encode())
-        read_plot_matrix();
+        pass
     elif (selection == 'm'):
-        ref = genRef('step')
-        size = len(ref)
-        print(size)
-        t = range(len(ref))
-        plt.plot(t, ref, 'r*-')
-        plt.ylabel('value')
-        plt.xlabel('index')
-        plt.show()
-        ser.write(f"{size}\n".encode())
-        for val in ref:
-            ser.write(f"{val}\n".encode())
+        pass
     elif (selection == 'n'):
-        cref = genRef('cubic')
-        cubicsize = len(cref)
-        print(cubicsize)
-        t = range(len(cref))
-        # plt.plot(t, cref, 'r*-')
-        # plt.ylabel('value')
-        # plt.xlabel('index')
-        # plt.show()
-        ser.write(f"{cubicsize}\n".encode())
-        for val in cref:
-            ser.write(f"{val}\n".encode())
+        pass
     elif (selection == 'o'):
-        print(f"Executing Trajectory!\n")
-        read_plot_matrix();
+        pass
     elif (selection == 'p'):
         print(f"Unpowering the motor...")
     elif (selection == 'q'):
@@ -166,3 +89,6 @@ while not has_quit:
 
     else:
         print('Invalid Selection ' + selection_endline)
+
+
+
